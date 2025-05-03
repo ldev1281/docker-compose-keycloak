@@ -34,14 +34,14 @@ prompt_for_configuration() {
     
     echo "postgres:"
     
-    read -p "KEYCLOAK_POSTGRES_USER [${KEYCLOAK_POSTGRES_USER:-KEYCLOAK}]: " input
+    read -p "KEYCLOAK_POSTGRES_USER [${KEYCLOAK_POSTGRES_USER:-keycloak}]: " input
     KEYCLOAK_POSTGRES_USER=${input:-${KEYCLOAK_POSTGRES_USER:-keycloak}}
 
     read -p "KEYCLOAK_POSTGRES_PASSWORD [${KEYCLOAK_POSTGRES_PASSWORD:-$POSTGRES_PASSWORD}]: " input
     KEYCLOAK_POSTGRES_PASSWORD=${input:-${KEYCLOAK_POSTGRES_PASSWORD:-$POSTGRES_PASSWORD}}
 
-    read -p "KEYCLOAK_POSTGRES_DB [${KEYCLOAK_POSTGRES_DB:-KEYCLOAK}]: " input
-    KEYCLOAK_POSTGRES_DB=${input:-${KEYCLOAK_POSTGRES_DB:-KEYCLOAK}}
+    read -p "KEYCLOAK_POSTGRES_DB [${KEYCLOAK_POSTGRES_DB:-keycloak}]: " input
+    KEYCLOAK_POSTGRES_DB=${input:-${KEYCLOAK_POSTGRES_DB:-keycloak}}
 
     echo ""
     echo "socat-smtp:"
