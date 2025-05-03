@@ -1,0 +1,88 @@
+services:
+
+  keycloak-postgres:
+    image: postgres:${KEYCLOAK_POSTGRES_VERSION}
+    container_name: keycloak-postgres
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${KEYCLOAK_POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
+      POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+
+    volumes:
+      - ./vol/keycloak-postgres/var/lib/postgresql/data:/var/lib/postgresql/data
+
+    networks:
+      - keycloak-private
+
+
+  keycloak-socat-smtp:
+    build:
+      context: ./docker/socat-socks5h
+    container_name: keycloak-socat-socks5h-smtp
+    restart: unless-stopped
+
+    environment:
+      SOURCE_PORT: ${KEYCLOAK_SOCAT_SMTP_PORT}
+      TARGET_HOST: ${KEYCLOAK_SOCAT_SMTP_HOST}
+      TARGET_PORT: ${KEYCLOAK_SOCAT_SMTP_PORT}
+      SOCKS5H_HOST: ${KEYCLOAK_SOCAT_SMTP_SOCKS5H_HOST:-}
+      SOCKS5H_PORT: ${KEYCLOAK_SOCAT_SMTP_SOCKS5H_PORT:-}
+
+    networks:
+      - keycloak-universe
+      - keycloak-private
+
+
+  keycloak-app:
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_APP_VERSION}
+    container_name: keycloak-app
+    restart: unless-stopped
+
+    command: start
+
+    depends_on:
+      keycloak-postgres:
+        condition: service_healthy
+
+    environment:
+      # postgres
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/${KEYCLOAK_POSTGRES_DB}
+      KC_DB_USERNAME: ${KEYCLOAK_POSTGRES_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD} 
+      # app
+      KC_HOSTNAME_URL: ${KEYCLOAK_APP_URL}
+      KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_APP_URL}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_APP_BOOTSTRAP_ADMIN_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_APP_BOOTSTRAP_ADMIN_PASSWORD}
+
+    volumes:
+      - ./vol/keycloak-app/opt/keycloak/data:/opt/keycloak/data
+
+    networks:
+      - keycloak-private
+      - caddy-keycloak
+
+
+networks:
+
+  caddy-keycloak:
+    name: caddy-keycloak
+    external: true
+
+  keycloak-universe:
+    name: keycloak-universe
+    driver: bridge
+
+  keycloak-private:
+    name: keycloak-private
+    driver: bridge
+    internal: true
