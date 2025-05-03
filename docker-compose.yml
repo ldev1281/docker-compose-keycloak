@@ -24,8 +24,7 @@ services:
 
 
   keycloak-socat-smtp:
-    build:
-      context: ./docker/socat-socks5h
+    image: ghcr.io/jordimock/docker-socat-socks5h:latest
     container_name: keycloak-socat-socks5h-smtp
     restart: unless-stopped
 
