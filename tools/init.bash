@@ -61,8 +61,8 @@ prompt_for_configuration() {
     read -p "KEYCLOAK_APP_BOOTSTRAP_ADMIN_PASSWORD [${KEYCLOAK_APP_BOOTSTRAP_ADMIN_PASSWORD:-$KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}]: " input
     KEYCLOAK_APP_BOOTSTRAP_ADMIN_PASSWORD=${input:-${KEYCLOAK_APP_BOOTSTRAP_ADMIN_PASSWORD:-$KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}}
     
-    read -p "KEYCLOAK_APP_URL [${KEYCLOAK_APP_URL:-https://your-domain.com}]: " input
-    KEYCLOAK_APP_URL=${input:-${KEYCLOAK_APP_URL:-https://your-domain.com}}
+    read -p "KEYCLOAK_APP_HOSTNAME [${KEYCLOAK_APP_HOSTNAME:-auth.example.com}]: " input
+    KEYCLOAK_APP_HOSTNAME=${input:-${KEYCLOAK_APP_HOSTNAME:-auth.example.com}}
 }
 
 
@@ -81,7 +81,7 @@ confirm_and_save_configuration() {
         ""
         "# KEYCLOAK app"
         "KEYCLOAK_APP_VERSION=${KEYCLOAK_APP_VERSION}"
-        "KEYCLOAK_APP_URL=${KEYCLOAK_APP_URL}"
+        "KEYCLOAK_APP_HOSTNAME=${KEYCLOAK_APP_HOSTNAME}"
         ""
         "# Secrets"
         "KEYCLOAK_APP_BOOTSTRAP_ADMIN_USER=${KEYCLOAK_APP_BOOTSTRAP_ADMIN_USER}"
