@@ -64,7 +64,6 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_APP_BOOTSTRAP_ADMIN_USER}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_APP_BOOTSTRAP_ADMIN_PASSWORD}
       KC_HTTP_ENABLED: true
-      KC_PROXY: edge
 
     volumes:
       - ./vol/keycloak-app/opt/keycloak/data:/opt/keycloak/data
