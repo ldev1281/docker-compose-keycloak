@@ -13,13 +13,13 @@ mkdir -p /docker/keycloak
 cd /docker/keycloak
 
 # Clone the main Keycloak project
-git clone https://github.com/jordimock/docker-compose-keycloak.git .
+git clone https://github.com/ldev1281/docker-compose-keycloak.git .
 ```
 
 
 ### 2. Create Docker Network and Set Up Reverse Proxy
 
-This project is designed to work with the reverse proxy configuration provided by [`docker-compose-caddy`](https://github.com/jordimock/docker-compose-caddy). To enable this integration, follow these steps:
+This project is designed to work with the reverse proxy configuration provided by [`docker-compose-caddy`](https://github.com/ldev1281/docker-compose-caddy). To enable this integration, follow these steps:
 
 1. **Create the shared Docker network** (if it doesn't already exist):
 
@@ -27,7 +27,7 @@ This project is designed to work with the reverse proxy configuration provided b
    docker network create --driver bridge caddy-keycloak
    ```
 
-2. **Set up the Caddy reverse proxy** by following the instructions in the [`docker-compose-caddy`](https://github.com/jordimock/docker-compose-caddy).  
+2. **Set up the Caddy reverse proxy** by following the instructions in the [`docker-compose-caddy`](https://github.com/ldev1281/docker-compose-caddy).  
 
 Once Caddy is installed, it will automatically detect the Keycloak container via the `caddy-keycloak` network and route traffic accordingly.
 
@@ -62,7 +62,7 @@ Your Keycloak instance should now be operational.
 
 ## Creating a Backup Task for Keycloak
 
-To create a backup task for your Keycloak deployment using [`backup-tool`](https://github.com/jordimock/backup-tool), add a new task file to `/etc/limbo-backup/rsync.conf.d/`:
+To create a backup task for your Keycloak deployment using [`backup-tool`](https://github.com/ldev1281/backup-tool), add a new task file to `/etc/limbo-backup/rsync.conf.d/`:
 
 ```bash
 sudo nano /etc/limbo-backup/rsync.conf.d/20-keycloak.conf.bash
