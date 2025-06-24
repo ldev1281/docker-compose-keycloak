@@ -122,6 +122,7 @@ setup_containers() {
 
     echo "Clearing volume data..."
     [ -d "${VOL_DIR}" ] && rm -rf "${VOL_DIR}"/*
+    mkdir -p "${VOL_DIR}keycloak-app/opt/keycloak/data" && chown 1000 "${VOL_DIR}keycloak-app/opt/keycloak/data"
 
     echo "Starting containers..."
     docker compose up -d
