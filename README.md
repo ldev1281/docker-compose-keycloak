@@ -1,4 +1,4 @@
-## Keycloak Docker Compose Deployment (with Caddy Reverse Proxy)
+# Keycloak Docker Compose Deployment (with Caddy Reverse Proxy)
 
 This repository provides a production-ready Docker Compose configuration for deploying Keycloak — an open-source identity and access management solution — with PostgreSQL as the database backend and Caddy as a reverse proxy. The setup includes automatic initialization, secure environment variable handling, and support for running behind a SOCKS5h-aware SMTP relay container.
 
@@ -34,6 +34,18 @@ Once Caddy is installed, it will automatically detect the Keycloak container via
 
 ### 3. Configure and Start the Application
 
+Configuration Variables:
+
+| Variable Name             | Description                                       | Default Value          |
+|---------------------------|---------------------------------------------------|------------------------|
+| `KEYCLOAK_APP_HOSTNAME`   | Public domain name for Keycloak                   | `auth.example.com`     |
+| `KEYCLOAK_APP_HOST`       | Internal container hostname for Keycloak service  | `keycloak-app`         |
+| `KEYCLOAK_ADMIN`          | Admin username for Keycloak                       | `admin`                |
+| `KEYCLOAK_ADMIN_PASSWORD` | Admin password for Keycloak                       | *(auto-generated)*     |
+| `POSTGRES_DB`             | Name of the PostgreSQL database for Keycloak      | `keycloak`             |
+| `POSTGRES_USER`           | PostgreSQL username for Keycloak                  | `keycloak`             |
+| `POSTGRES_PASSWORD`       | PostgreSQL password for Keycloak                  | *(auto-generated)*     |
+
 To configure and launch all required services, run the provided script:
 
 ```bash
@@ -49,16 +61,45 @@ The script will:
 **Important:**  
 Make sure to securely store your `.env` file locally for future reference or redeployment.
 
+### 4. Start the Keycloak Service
 
-### 4. Verify Running Containers
+```
+docker compose up -d
+```
 
-Check if all containers are running properly:
+This will start Wekan and make your configured domains available.
+
+### 5. Verify Running Containers
+
 
 ```bash
 docker ps
 ```
 
-Your Keycloak instance should now be operational.
+You should see the `keycloak-app` container running.
+
+### 6. Persistent Data Storage
+
+Keycloak and PostgreSQL use the following bind-mounted volumes for data persistence:
+
+- `./vol/keycloak-postgres/var/lib/postgresql/data` – PostgreSQL database volume
+- `./vol/keycloak-app/opt/keycloak/data` – Keycloak runtime data and attachments
+
+---
+
+### Example Directory Structure
+
+```
+/docker/keycloak/
+├── docker-compose.yml
+├── tools/
+│   └── init.bash
+├── vol/
+│   ├── keycloak-app/
+│   │   └── data/
+│   └── keycloak-db/
+├── .env
+```
 
 ## Creating a Backup Task for Keycloak
 
