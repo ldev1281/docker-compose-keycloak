@@ -23,23 +23,6 @@ services:
       - keycloak-private
 
 
-  keycloak-socat-smtp:
-    image: ghcr.io/ldev1281/docker-socat-socks5h:latest
-    container_name: keycloak-socat-socks5h-smtp
-    restart: unless-stopped
-
-    environment:
-      LISTEN_PORT: ${KEYCLOAK_SOCAT_SMTP_PORT}
-      TARGET_HOST: ${KEYCLOAK_SOCAT_SMTP_HOST}
-      TARGET_PORT: ${KEYCLOAK_SOCAT_SMTP_PORT}
-      SOCKS5H_HOST: ${KEYCLOAK_SOCAT_SMTP_SOCKS5H_HOST:-}
-      SOCKS5H_PORT: ${KEYCLOAK_SOCAT_SMTP_SOCKS5H_PORT:-}
-
-    networks:
-      - keycloak-universe
-      - keycloak-private
-
-
   keycloak-app:
     image: quay.io/keycloak/keycloak:${KEYCLOAK_APP_VERSION}
     container_name: keycloak-app
@@ -69,18 +52,14 @@ services:
 
     networks:
       - keycloak-private
-      - caddy-keycloak
+      - proxy-client-keycloak
 
 
 networks:
 
-  caddy-keycloak:
-    name: caddy-keycloak
+  proxy-client-keycloak:
+    name: proxy-client-keycloak
     external: true
-
-  keycloak-universe:
-    name: keycloak-universe
-    driver: bridge
 
   keycloak-private:
     name: keycloak-private
